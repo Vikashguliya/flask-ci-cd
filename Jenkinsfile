@@ -1,7 +1,9 @@
+
 pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -12,13 +14,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                sh 'python3 -c "import flask; print(\'Flask OK\')"'
+                sh '''
+                . venv/bin/activate
+                python3 -c "import flask; print('Flask OK')"
+                '''
             }
         }
 
